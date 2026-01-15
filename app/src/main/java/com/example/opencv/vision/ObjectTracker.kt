@@ -10,7 +10,6 @@ import org.opencv.core.*
 import org.opencv.features2d.BFMatcher
 import org.opencv.features2d.ORB
 import org.opencv.imgproc.Imgproc
-import android.util.Log
 import com.google.android.gms.tasks.Tasks
 import kotlin.math.abs
 
@@ -71,10 +70,10 @@ class ObjectTracker {
                         }
                     }
                 }
-            } catch (e: Exception) {}
+            } catch (_: Exception) {}
         }
 
-        val rawMat = try { imageProxy.toMat() } catch (e: Exception) { return TrackingResult() }
+        val rawMat = try { imageProxy.toMat() } catch (_: Exception) { return TrackingResult() }
         val mat = Mat()
         Imgproc.GaussianBlur(rawMat, mat, Size(5.0, 5.0), 0.0)
         rawMat.release()
@@ -154,15 +153,28 @@ class ObjectTracker {
                     Offset(minX.toFloat() + (smoothedDx - rawDx), maxY.toFloat() + (smoothedDy - rawDy))
                 )
                 
-                TrackingResult(true, true, smoothedDx, smoothedDy, currentObjectName, boundaryList)
+                TrackingResult(
+                    detected = true,
+                    isObjectInZoom = true,
+                    dx = smoothedDx,
+                    dy = smoothedDy,
+                    objectName = currentObjectName,
+                    boundaries = boundaryList
+                )
             } else {
-                TrackingResult(false, false, 0f, 0f, currentObjectName)
+                TrackingResult(
+                    detected = false,
+                    isObjectInZoom = false,
+                    dx = 0f,
+                    dy = 0f,
+                    objectName = currentObjectName
+                )
             }
 
             releaseAll(mat, keypoints, descriptors)
             return result
 
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             releaseAll(mat, keypoints, descriptors)
             return TrackingResult(detected = false)
         }

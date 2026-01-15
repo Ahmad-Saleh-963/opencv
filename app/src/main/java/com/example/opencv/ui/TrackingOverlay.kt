@@ -1,7 +1,6 @@
 package com.example.opencv.ui
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,7 +50,7 @@ fun TrackingOverlay(result: TrackingResult) {
             // نقطة المنتصف (الدائرة الصغيرة)
             drawCircle(
                 color = statusColor.copy(alpha = 0.8f),
-                radius = 3.dp.toPx(),
+                radius = 4.dp.toPx(),
                 center = Offset(centerX, centerY)
             )
         }
